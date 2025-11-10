@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include <unistd.h> // Required for fork(), getpid(), getppid()
+#include <sys/types.h> // Required for pid_t
+
+int main() {
+    pid_t pid; // Variable to store the return value of fork()
+
+    // Get and display the PID and PPID of the current process before forking
+    printf("Original Process (before fork):\n");
+    printf("  PID: %d\n", getpid());
+    printf("  PPID: %d\n", getppid());
+    printf("\n");
+
+    // Create a new process using fork()
+    pid = fork();
+
+    if (pid < 0) {
+        // Error occurred during fork()
+        perror("fork failed");
+        return 1; // Indicate an error
+    } else if (pid == 0) {
+        // This block is executed by the child process
+        printf("Child Process:\n");
+        printf("  PID: %d\n", getpid());
+        printf("  PPID: %d\n", getppid());
+    } else {
+        // This block is executed by the parent process
+        printf("Parent Process:\n");
+        printf("  PID: %d\n", getpid());
+        printf("  PPID: %d\n", getppid());
+        printf("  Child PID (as seen by parent): %d\n", pid);
+    }
+
+    return 0; // Indicate successful execution
+}
